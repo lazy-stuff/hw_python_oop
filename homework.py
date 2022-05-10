@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Dict
+from typing import List, Dict, Type
 
 
 @dataclass
@@ -38,8 +38,7 @@ class Training:
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
-        distance = self.action * self.LEN_STEP / self.M_IN_KM
-        return distance
+        return self.action * self.LEN_STEP / self.M_IN_KM
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
@@ -131,11 +130,11 @@ class Swimming(Training):
         return calories_spent_swim
 
 
-def read_package(workout_type: str, data: List) -> Training:
+def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    workout_dict: Dict[str, Training] = {'SWM': Swimming,
-                                         'RUN': Running,
-                                         'WLK': SportsWalking}
+    workout_dict: Dict[str, Type[Training]] = {'SWM': Swimming,
+                                               'RUN': Running,
+                                               'WLK': SportsWalking}
     if workout_type in workout_dict:
         training_item = workout_dict[workout_type]
         return training_item(*data)
