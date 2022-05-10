@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Dict, Type
+from typing import List, Union, Dict, Type
 
 
 @dataclass
@@ -68,9 +68,11 @@ class Running(Training):
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         duration_in_min = self.duration * self.MIN_IN_H
-        calories_spent_run = ((self.COEFF_RUN_MULT * self.get_mean_speed()
-                              - self.COEFF_RUN_SPEED)
-                              * self.weight / self.M_IN_KM * duration_in_min)
+        calories_spent_run = (
+            (self.COEFF_RUN_MULT
+             * self.get_mean_speed() - self.COEFF_RUN_SPEED)
+            * self.weight / self.M_IN_KM * duration_in_min
+        )
         return calories_spent_run
 
 
@@ -130,7 +132,7 @@ class Swimming(Training):
         return calories_spent_swim
 
 
-def read_package(workout_type: str, data: List[int]) -> Training:
+def read_package(workout_type: str, data: List[Union[int, float]]) -> Training:
     """Прочитать данные полученные от датчиков."""
     workout_dict: Dict[str, Type[Training]] = {'SWM': Swimming,
                                                'RUN': Running,
